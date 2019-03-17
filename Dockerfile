@@ -1,5 +1,10 @@
 FROM centos:7.5.1804
 
+LABEL org.label-schema.license="AGPL-3.0" \
+      org.label-schema.vcs-url="https://github.com/phdax/osmtools" \
+      org.label-schema.vendor="" \
+      maintainer="phdax <pophitdax@gmail.com>"
+
 # 参考:
 # https://hub.docker.com/r/yagajs/osmosis/dockerfile
 
@@ -14,7 +19,6 @@ ENV OSMOSIS_URL $OSMOSIS_URL
 ENV OSMFILTER_SRC_URL $OSMFILTER_SRC_URL
 ENV OSMCONVERT_SRC_URL $OSMCONVERT_SRC_URL
 
-RUN groupadd $EXEC_USER && useradd -g $EXEC_USER $EXEC_USER
 
 # イメージから日本語ロケールが削除されているため、復活させる必要がある
 RUN sed -i '/^override_install_langs=/d' /etc/yum.conf && \
@@ -69,9 +73,5 @@ RUN mkdir -p /opt/osmconvert && \
 # コンテナにシェルで入ったときに見やすくする
 RUN echo 'alias ll="ls -laF --color=auto"' >> /root/.bashrc && \
     echo 'export PS1="[\u@\h \w]\$ "' >> /root/.bashrc
-
-# jenkinsユーザでrun,execできるように
-COPY /resources/passwd /etc/
-COPY /resources/group /etc/
 
 CMD ["tail", "-f", "/dev/null"]
