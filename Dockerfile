@@ -1,9 +1,9 @@
 FROM centos:7.5.1804
 
 LABEL org.label-schema.license="AGPL-3.0" \
-      org.label-schema.vcs-url="https://github.com/phdax/osmtools" \
-      org.label-schema.vendor="" \
-      maintainer="phdax <pophitdax@gmail.com>"
+    org.label-schema.vcs-url="https://github.com/phdax/osmtools" \
+    org.label-schema.vendor="" \
+    maintainer="phdax <pophitdax@gmail.com>"
 
 # 参考:
 # https://hub.docker.com/r/yagajs/osmosis/dockerfile
@@ -44,6 +44,9 @@ RUN curl -o /opt/zlib.tar.gz $ZLIB_URL && \
     rm /opt/zlib.tar.gz && \
     mv /opt/zlib* /opt/zlib && \
     cd /opt/zlib && \
+    sed -i '1i#define _LARGEFILE64_SOURCE 1' zconf.h && \
+    sed -i '1i#define _LFS64_LARGEFILE 1'  zconf.h && \
+    sed -i '1i#define z_off64_t __int64' zconf.h && \
     ./configure && \
     make && \
     make install
